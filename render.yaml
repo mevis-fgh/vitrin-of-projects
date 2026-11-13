@@ -1,0 +1,29 @@
+# Деплой на Render (https://render.com) — бесплатный тариф подходит для демо.
+# Важно: на бесплатном тарифе диск (disk) недоступен, поэтому база данных
+# будет создаваться заново при каждом переразвёртывании. Для сохранения данных
+# выберите платный план и раскомментируйте блок disk ниже.
+services:
+  - type: web
+    name: vitrina-it
+    runtime: docker
+    plan: free
+    region: frankfurt
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
+      - key: PORT
+        value: "8000"
+      - key: DATA_DIR
+        value: /data
+      - key: DEMO_MODE
+        value: "1"
+      - key: ADMIN_PASSWORD
+        generateValue: true
+      - key: COOKIE_SECURE
+        value: "1"
+    # disk:
+    #   name: vitrina-data
+    #   mountPath: /data
+    #   sizeGB: 1

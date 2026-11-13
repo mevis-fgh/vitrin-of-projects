@@ -1,0 +1,37 @@
+# systemd-юнит для запуска АИС «Витрина ИТ-проектов» на сервере.
+#
+# Установка:
+#   sudo useradd --system --home /opt/vitrina --shell /usr/sbin/nologin vitrina
+#   sudo mkdir -p /opt/vitrina /var/lib/vitrina
+#   sudo cp -r . /opt/vitrina && sudo chown -R vitrina:vitrina /opt/vitrina /var/lib/vitrina
+#   sudo cp deploy/vitrina.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now vitrina
+
+[Unit]
+Description=АИС «Витрина ИТ-проектов»
+After=network.target
+
+[Service]
+Type=simple
+User=vitrina
+Group=vitrina
+WorkingDirectory=/opt/vitrina
+Environment=HOST=127.0.0.1
+Environment=PORT=8000
+Environment=DATA_DIR=/var/lib/vitrina
+Environment=DEMO_MODE=1
+Environment=COOKIE_SECURE=1
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/usr/bin/python3 app.py
+Restart=always
+RestartSec=3
+
+# Ограничения безопасности
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/vitrina
+
+[Install]
+WantedBy=multi-user.target

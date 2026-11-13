@@ -1,0 +1,11 @@
+# Вариант с Caddy: HTTPS-сертификат выпускается и продлевается автоматически.
+# Установка: apt install caddy; затем положите файл в /etc/caddy/Caddyfile
+# и выполните: systemctl reload caddy
+
+vitrina.example.ru {
+    encode gzip
+    reverse_proxy 127.0.0.1:8000
+    request_body {
+        max_size 20MB
+    }
+}
